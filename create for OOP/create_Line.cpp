@@ -1,20 +1,27 @@
-// file for lab oop 1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
 #include <iostream>
+#include <cmath>
+#include "Line.h"
+using namespace std;
 
-int main()
-{
-    std::cout << "Hello World!\n";
+const double EPS = 1e-9;
+
+Line::Line() { setCoefficients(1.0, 0.0, 0.0); }
+Line::Line(double a_val, double b_val, double c_val) { setCoefficients(a_val, b_val, c_val); }
+
+void Line::setCoefficients(double a_val, double b_val, double c_val) {
+    if (fabs(a_val) < EPS && fabs(b_val) < EPS) {
+        a_ =1; b_ = 0; c_ = 0;
+    }
+    else {
+        a_ = a_val; b_ = b_val; c_ = c_val;
+    }
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+void Line::printLine() const { cout << a_ << "x + " << b_ << "y + " << c_ << " = 0" << endl; }
+void Line::readLine() {
+    double a_in, b_in, c_in;
+    cin >> a_in >> b_in >> c_in;
+    setCoefficients(a_in, b_in, c_in);
+}
+double Line::getA() const { return a_; }
+double Line::getB() const { return b_; }
+double Line::getC() const { return c_; }
