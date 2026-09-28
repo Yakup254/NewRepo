@@ -25,3 +25,19 @@ void Line::readLine() {
 double Line::getA() const { return a_; }
 double Line::getB() const { return b_; }
 double Line::getC() const { return c_; }
+void Line::setA(double val) { setCoefficients(val, b_, c_); }
+void Line::setB(double val) { setCoefficients(a_, val, c_); }
+void Line::setC(double val) { c_ = val; }
+
+bool Line::passesOrigin() const { return fabs(c_) < EPS; }
+bool Line::isParallelToOx() const { return (fabs(a_) < EPS && fabs(b_) > EPS); }
+bool Line::getIntercepts(double& xIntercept, double& yIntercept) const {
+    if (fabs(a_) < EPS || fabs(b_) < EPS) return false;
+    xIntercept = -c_ / a_; yIntercept = -c_ / b_;
+    return true;
+}
+bool Line::getSlope(double& slope) const {
+    if (fabs(b_) < EPS) return false;
+    slope = -a_ / b_;
+    return true;
+}
