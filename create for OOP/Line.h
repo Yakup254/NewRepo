@@ -1,23 +1,16 @@
 #pragma once
 
-#include <vector>
-
-using namespace std;
-
-class Line
-{
+class Line {
 public:
-
-    Line();
+    // Конструкторы
+    Line() = default;
     Line(double a_val, double b_val, double c_val);
-    Line(const Line& other);
-    ~Line();
 
-    void setCoefficients(double a_val, double b_val, double c_val);
+    // Ввод и вывод
+    void input();
+    void output() const;
 
-    void printLine() const;
-    void readLine();
-
+    // Геттеры и сеттеры
     double getA() const;
     double getB() const;
     double getC() const;
@@ -26,6 +19,7 @@ public:
     void setB(double val);
     void setC(double val);
 
+    // Геометрические методы
     bool passesOrigin() const;
     bool isParallelToOx() const;
     bool getIntercepts(double& xIntercept, double& yIntercept) const;
@@ -39,8 +33,7 @@ public:
     double distanceToParallelLine(const Line& other) const;
 
 private:
-
-    double a_ = 1;
-    double b_ = 0;
-    double c_ = 0;
+    double a_ = 1.0;
+    double b_ = 0.0;
+    double c_ = 0.0;
 };

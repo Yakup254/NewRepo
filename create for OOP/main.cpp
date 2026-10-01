@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "Line.h"
 
 using namespace std;
@@ -7,90 +6,98 @@ using namespace std;
 int main() {
     setlocale(LC_ALL, "Rus");
 
-    cout << " 1 и 2. Создание и ввод 1-й прямой \n";
     Line line1;
-    line1.readLine();
+    cout << "Введите коэффициенты a, b, c через пробел: ";
+    line1.input();
+
     cout << "Уравнение 1-й прямой: ";
-    line1.printLine();
+    line1.output();
 
-    cout << "\n-- Свойства 1-й прямой \n";
+    cout << "\n 2. Свойства 1-й прямой \n";
 
-    cout << "4. Проходит через начало координат?: ";
-    if (line1.passesOrigin()) cout << "ДА"; else cout << "НЕТ";
-    cout << endl;
+    cout << "Проходит через начало координат?: ";
+    if (line1.passesOrigin()) {
+        cout << "ДА\n";
+    }
+    else {
+        cout << "НЕТ\n";
+    }
 
-    cout << "5. Параллельна оси Ox?: ";
-    if (line1.isParallelToOx()) cout << "ДА"; else cout << "НЕТ";
-    cout << endl;
+    cout << "Параллельна оси Ox?: ";
+    if (line1.isParallelToOx()) {
+        cout << "ДА\n";
+    }
+    else {
+        cout << "НЕТ\n";
+    }
 
     double xIntercept, yIntercept;
     if (line1.getIntercepts(xIntercept, yIntercept)) {
-        cout << "6. Отрезки на осях координат: x = " << xIntercept << ", y = " << yIntercept << endl;
+        cout << "Отрезки на осях координат: x = " << xIntercept << ", y = " << yIntercept << "\n";
     }
     else {
-        cout << "6. Прямая параллельна одной из осей, поэтому не пересекает обе.\n";
+        cout << "Пмямая параллельна одной из осей.\n";
     }
 
     double slope;
     if (line1.getSlope(slope)) {
-        cout << "7. Угловой коэффициент (k): " << slope << endl;
+        cout << "Угловой коэффициент (k): " << slope << "\n";
     }
     else {
-        cout << "7. Прямая вертикальная, угловой коэффициент не определен.\n";
+        cout << "Прямая вертикальная, k не определен.\n";
     }
 
+    cout << "\n 3. Проверка точки \n";
     double pointX, pointY;
-    cout << "\nВведите координату x для точки: "; cin >> pointX;
-    cout << "Введите координату y для точки: "; cin >> pointY;
+    cout << "Введите координату X для точки: "; cin >> pointX;
+    cout << "Введите координату Y для точки: "; cin >> pointY;
 
+    cout << "Точка принадлежит 1-й прямой?: ";
     if (line1.containsPoint(pointX, pointY)) {
-        cout << "ДА";
+        cout << "ДА\n";
     }
     else {
-        cout << "НЕТ";
+        cout << "НЕТ\n";
     }
-    cout << endl;
-    cout << "11. Расстояние от точки до 1-й прямой: " << line1.distanceToPoint(pointX, pointY) << endl;
 
-    cout << "\n Создание и ввод 2-й прямой \n";
+    cout << "Расстояние от точки до 1-й прямой: " << line1.distanceToPoint(pointX, pointY) << "\n";
+
+    cout << "\n 4. Создание и ввод 2-й прямой \n";
     Line line2;
-    line2.readLine();
+    cout << "Введите коэффициенты a, b, c через пробел: ";
+    line2.input();
+
     cout << "Уравнение 2-й прямой: ";
-    line2.printLine();
+    line2.output();
 
-    cout << "\n- - Отношения между двумя прямыми - -\n";
+    cout << "\n 5. Отношения между прямыми \n";
 
-    cout << "8. Прямые совпадают?: ";
+    cout << "Прямые совпадают?: ";
     if (line1 == line2) {
-        cout << "ДА";
+        cout << "ДА\n";
     }
     else {
-        cout << "НЕТ";
+        cout << "НЕТ\n";
     }
-    cout << endl;
 
-    cout << "9. Прямые параллельны?: ";
+    cout << "Прямые параллельны?: ";
     if (line1.isParallel(line2)) {
-        cout << "ДА";
+        cout << "ДА\n";
     }
     else {
-        cout << "НЕТ";
+        cout << "НЕТ\n";
     }
-    cout << endl;
 
     double intersectX, intersectY;
     if (line1.intersect(line2, intersectX, intersectY)) {
-        cout << "12. Точка пересечения: (" << intersectX << ", " << intersectY << ")\n";
+        cout << "Точка пересечения: (" << intersectX << "; " << intersectY << ")\n";
     }
     else {
-        cout << "12. Прямые параллельны или совпадают, единственной точки пересечения нет.\n";
+        cout << "Прямые параллельны или совпадают.\n";
     }
 
     if (line1.isParallel(line2)) {
-        cout << "13. Расстояние между параллельными прямыми: " << line1.distanceToParallelLine(line2) << endl;
-    }
-    else {
-        cout << "13. Прямые не параллельны, расстояние вычислить нельзя.\n";
+        cout << "Расстояние между параллельными прямыми: " << line1.distanceToParallelLine(line2) << "\n";
     }
 
     return 0;
