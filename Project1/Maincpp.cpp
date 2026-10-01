@@ -11,7 +11,7 @@ int main() {
     int totalSizes = sizeof(sizes) / sizeof(sizes[0]);
     int repeats = 4;
 
-    cout << " ЭКСПРИМЕНТ (Диапазон стоимостей: 10 - 100)" << endl;
+    cout << " ЭКСПЕРИМЕНТ (Диапазон стоимостей: 10 - 100)" << endl;
 
     for (int i = 0; i < totalSizes; i++) {
         cout << "\nРазмерность матрицы: " << sizes[i] << " x " << sizes[i] << endl;
