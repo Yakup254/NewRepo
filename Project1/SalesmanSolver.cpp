@@ -26,28 +26,37 @@ vector<vector<int>> createRandomMatrix(int n) {
 }
 
 bool NextPermutation(vector<int>& p) {
-    int n = p.size();
+    int n = p.size() - 1;
 
-    // ћаксимальное i
-    int i = n - 2;
-    while (i >= 0 && p[i] >= p[i + 1]) {
-        i--;
-    }
-    if (i < 0) return false;
-
-    // Ќаходим максимальное j
-    int j = n - 1;
-    while (p[i] >= p[j]) {
-        j--;
+    // максимальное значение i
+    int i = 0;
+    for (int k = n - 1; k > 0; k--) {
+        if (p[k] < p[k + 1]) {
+            i = k;
+            break;
+        }
     }
 
-    // swap
+    if (i == 0) {
+        return false;
+    }
+
+    // максимальное значение j
+    int j = 0;
+    for (int k = n; k > i; k--) {
+        if (p[i] < p[k]) {
+            j = k;
+            break;
+        }
+    }
+
+  
     int temp = p[i];
     p[i] = p[j];
     p[j] = temp;
 
     int left = i + 1;
-    int right = n - 1;
+    int right = n;
     while (left < right) {
         int t = p[left];
         p[left] = p[right];
@@ -56,15 +65,16 @@ bool NextPermutation(vector<int>& p) {
         right--;
     }
 
-    return true; 
+    return true;
 }
 
 void executeRound(int n, int roundIndex) {
     auto matrix = createRandomMatrix(n);
 
     vector<int> cities;
+    cities.push_back(0);
     for (int i = 1; i < n; i++) {
-        cities.push_back(i); 
+        cities.push_back(i);
     }
 
     int minCost = INF;
@@ -76,18 +86,17 @@ void executeRound(int n, int roundIndex) {
         int currentCost = 0;
         int prevCity = 0;
 
-        for (size_t i = 0; i < cities.size(); i++) {
+        for (size_t i = 1; i < cities.size(); i++) {
             int city = cities[i];
             currentCost += matrix[prevCity][city];
             prevCity = city;
         }
-        currentCost += matrix[prevCity][0];
+        currentCost += matrix[prevCity];
 
         if (currentCost < minCost) minCost = currentCost;
         if (currentCost > maxCost) maxCost = currentCost;
 
         bool hasNext = NextPermutation(cities);
-
         if (hasNext == false) {
             break;
         }
@@ -95,6 +104,7 @@ void executeRound(int n, int roundIndex) {
 
     auto endExact = chrono::high_resolution_clock::now();
     double timeExact = chrono::duration<double, milli>(endExact - startExact).count();
+
 
     vector<bool> visited(n, false);
     int greedyCost = 0;
@@ -117,7 +127,7 @@ void executeRound(int n, int roundIndex) {
         currentCity = nextCity;
         visited[currentCity] = true;
     }
-    greedyCost += matrix[currentCity][0];
+    greedyCost += matrix[currentCity];
 
     auto endGreedy = chrono::high_resolution_clock::now();
     double timeGreedy = chrono::duration<double, milli>(endGreedy - startGreedy).count();
