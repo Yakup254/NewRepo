@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "SalesmanSolver.h"
 
 using namespace std;

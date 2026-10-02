@@ -1,16 +1,12 @@
 #pragma once
-
 #include <vector>
 
 using namespace std;
 
-vector<vector<int>> createRandomMatrix(int n, int minVal, int maxVal);
+// Функция создания случайной матрицы
+vector<vector<int>> createRandomMatrix(int n);
 
-void printRoute(const vector<int>& path);
-
-void evaluatePaths(const vector<vector<int>>& matrix, int n, int start, int current,
-    int visitedCount, int currentCost, vector<bool>& visited,
-    vector<int>& currentPath, int& minCost, vector<int>& bestPath,
-    int& maxCost, vector<int>& worstPath);
+//алгоритм Дейкстры для перестановок
+bool NextPermutation(vector<int>& p);
 
 void executeRound(int n, int roundIndex);
