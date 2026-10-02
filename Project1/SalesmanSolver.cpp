@@ -4,7 +4,7 @@
 #include <random>
 #include <iomanip>
 
-#include "solver.h"
+#include "SalesmanSolver.h"
 
 using namespace std;
 
