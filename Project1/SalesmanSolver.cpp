@@ -4,7 +4,7 @@
 #include <random>
 #include <iomanip>
 
-#include "SalesmanSolver.h"
+#include "solver.h"
 
 using namespace std;
 
@@ -50,7 +50,7 @@ bool NextPermutation(vector<int>& p) {
         }
     }
 
-  
+
     int temp = p[i];
     p[i] = p[j];
     p[j] = temp;
@@ -91,7 +91,8 @@ void executeRound(int n, int roundIndex) {
             currentCost += matrix[prevCity][city];
             prevCity = city;
         }
-        currentCost += matrix[prevCity];
+        currentCost += matrix[prevCity][0];
+
 
         if (currentCost < minCost) minCost = currentCost;
         if (currentCost > maxCost) maxCost = currentCost;
@@ -127,7 +128,8 @@ void executeRound(int n, int roundIndex) {
         currentCity = nextCity;
         visited[currentCity] = true;
     }
-    greedyCost += matrix[currentCity];
+    greedyCost += matrix[currentCity][0];
+
 
     auto endGreedy = chrono::high_resolution_clock::now();
     double timeGreedy = chrono::duration<double, milli>(endGreedy - startGreedy).count();
