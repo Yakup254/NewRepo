@@ -1,87 +1,94 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include "BMsearchs.h"
+#include "BMsearch.h"
 
-using namespace std;
+vector<int> makeTAB(const string& P)
+{
+	int m = P.size();
+	vector<int> T(256, m);
 
-vector<int> createCharMap(const string& pattern) {
-    vector<int> shiftTable(256, -1);
-    int patternSize = static_cast<int>(pattern.size());
-
-    for (int i = 0; i < patternSize; i++) {
-        unsigned char character = pattern[i];
-        shiftTable[character] = i;
-    }
-    return shiftTable;
+	for (int i = 0; i < m - 1; i++)
+	{
+		char character = P[i];
+		T[character] = m - 1 - i;
+	}
+	return T;
 }
 
-int findFirst(const string& text, const string& pattern) {
-    int textSize = static_cast<int>(text.size());
-    int patternSize = static_cast<int>(pattern.size());
+vector<int> findAllInRange(const string& S, const string& P, size_t start, size_t end)
+{
+	vector<int> results;
+	int n = S.size();
+	int m = P.size();
 
-    if (patternSize == 0 || textSize < patternSize) return -1;
+	if (start > end || end >= S.size() || m == 0)
+	{
+		return results;
+	}
 
-    vector<int> shiftTable = createCharMap(pattern);
-    int shift = 0;
+	vector<int> T = makeTAB(P);
 
-    while (shift <= (textSize - patternSize)) {
-        int j = patternSize - 1;
-        while (j >= 0 && pattern[j] == text[shift + j]) {
-            j--;
-        }
-        if (j < 0) return shift;
+	int i = start + m - 1;
+	int j = m - 1;
 
-        unsigned char badChar = text[shift + j];
-        int badCharShift = j - shiftTable[badChar];
-        if (badCharShift < 1) {
-            shift += 1;
-        }
-        else {
-            shift += badCharShift;
-        }
-    }
-    return -1;
+	while (i <= end)
+	{
+		int k = i;
+		j = m - 1;
+
+		while (j >= 0)
+		{
+			if (S[k] == P[j])
+			{
+				j--;
+				k--;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (j >= 0)
+		{
+			char textChar = S[i];
+			i = i + T[textChar];
+			j = m - 1;
+		}
+		else
+		{
+			results.push_back(i + 1 - m);
+
+			char textChar = S[i];
+			int shift = T[textChar];
+
+			if (shift > 1) {
+				i = i + shift;
+			}
+			else {
+				i = i + 1;
+			}
+			j = m - 1;
+		}
+	}
+	return results;
 }
-void printResult(const string& label, const vector<int>& indices) {
-    cout << label << ": [";
-    for (size_t i = 0; i < indices.size(); i++) {
-        cout << indices[i];
-        if (i + 1 < indices.size()) cout << ", ";
-    }
-    cout << "]" << endl;
+
+vector<int> findAll(const string& S, const string& P)
+{
+	if (S.empty() || P.empty())
+	{
+		return vector<int>();
+	}
+	return findAllInRange(S, P, 0, S.size() - 1);
 }
 
-vector<int> findAll(const string& text, const string& pattern) {
-    vector<int> results;
-    int textSize = static_cast<int>(text.size());
-    int patternSize = static_cast<int>(pattern.size());
+int findFirst(const string& S, const string& P)
+{
+	vector<int> results = findAll(S, P);
 
-    if (text.empty() || pattern.empty() || textSize < patternSize) return results;
-
-    vector<int> shiftTable = createCharMap(pattern);
-    int shift = 0;
-
-    while (shift <= (textSize - patternSize)) {
-        int j = patternSize - 1;
-        while (j >= 0 && pattern[j] == text[shift + j]) {
-            j--;
-        }
-        if (j < 0) {
-            results.push_back(shift);
-            shift += 1;
-        }
-        else {
-            unsigned char badChar = text[shift + j];
-            int badCharShift = j - shiftTable[badChar];
-
-            if (badCharShift < 1) {
-                shift += 1;
-            }
-            else {
-                shift += badCharShift;
-            }
-        }
-    }
-    return results;
+	if (results.empty()) {
+		return -1;
+	}
+	else {
+		return results[0];
+	}
 }

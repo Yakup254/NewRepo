@@ -3,11 +3,9 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::string;
+using std::vector;
 
-vector<int> createCharMap(const string& pattern);
-int findFirst(const string& text, const string& pattern);
-
-void printResult(const string& label, const vector<int>& indices);
-vector<int> findAll(const string& text, const string& pattern);
-
+int findFirst(const string& S, const string& P);
+vector<int> findAll(const string& S, const string& P);
+vector<int> findAllInRange(const string& S, const string& P, size_t start, size_t end);
