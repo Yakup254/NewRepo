@@ -4,7 +4,7 @@
 #include <random>
 #include <iomanip>
 
-#include "SalesmanSolver.h"
+#include "SalesmenSolver.h"
 
 using namespace std;
 
@@ -24,7 +24,13 @@ vector<vector<int>> createRandomMatrix(int n) {
     }
     return matrix;
 }
-
+void printRoute(const vector<int>& path) {
+    for (size_t i = 0; i < path.size(); i++) {
+        cout << path[i];
+        if (i < path.size() - 1) cout << "-";
+    }
+}
+// Алгоритм Дейкстры
 bool NextPermutation(vector<int>& p) {
     int n = p.size() - 1;
 
@@ -50,11 +56,11 @@ bool NextPermutation(vector<int>& p) {
         }
     }
 
-
+    //  Обмен элементов местами
     int temp = p[i];
     p[i] = p[j];
     p[j] = temp;
-
+    // Переворот хвоста
     int left = i + 1;
     int right = n;
     while (left < right) {
@@ -79,7 +85,7 @@ void executeRound(int n, int roundIndex) {
 
     int minCost = INF;
     int maxCost = -1;
-
+    vector<int> bestExactPath;
     auto startExact = chrono::high_resolution_clock::now();
 
     while (true) {
@@ -94,7 +100,11 @@ void executeRound(int n, int roundIndex) {
         currentCost += matrix[prevCity][0];
 
 
-        if (currentCost < minCost) minCost = currentCost;
+        if (currentCost < minCost) {
+            minCost = currentCost;
+            bestExactPath = cities; //текущий лучший маршрут
+            bestExactPath.push_back(0);//возврат в 0 для вывода
+        }
         if (currentCost > maxCost) maxCost = currentCost;
 
         bool hasNext = NextPermutation(cities);
@@ -112,6 +122,9 @@ void executeRound(int n, int roundIndex) {
     int currentCity = 0;
     visited[0] = true;
 
+    vector<int> greedyPath;
+    greedyPath.push_back(0); //из 0 города
+
     auto startGreedy = chrono::high_resolution_clock::now();
 
     for (int step = 0; step < n - 1; step++) {
@@ -127,9 +140,10 @@ void executeRound(int n, int roundIndex) {
         greedyCost += shortest;
         currentCity = nextCity;
         visited[currentCity] = true;
+        greedyPath.push_back(currentCity); //город в жадный путь
     }
     greedyCost += matrix[currentCity][0];
-
+    greedyPath.push_back(0);
 
     auto endGreedy = chrono::high_resolution_clock::now();
     double timeGreedy = chrono::duration<double, milli>(endGreedy - startGreedy).count();
@@ -143,10 +157,14 @@ void executeRound(int n, int roundIndex) {
         << " > Точный метод \n Лучший: " << minCost
         << ", Худший: " << maxCost
         << ", Время: " << fixed << setprecision(4) << timeExact << " мс\n";
-
+    cout << "    Лучший путь: ";
+    printRoute(bestExactPath);
+    cout << endl;
     cout << "    Жадный метод Стоимость: " << greedyCost
         << ", Время: " << fixed << setprecision(4) << timeGreedy << " мс\n";
-
+    cout << "    Путь: ";
+    printRoute(greedyPath);
+    cout << endl;
     cout << "    Качество Э: " << fixed << setprecision(1) << quality << "%" << endl;
     cout << "-- --- - -- - -- - -- - -- -- ---  --" << endl;
 }
