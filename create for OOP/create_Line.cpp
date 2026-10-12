@@ -6,7 +6,7 @@ using namespace std;
 
 const double EPS = 1e-9;
 
-Line::Line(double a_val, double b_val, double c_val) {
+Line::Line(const double a_val,const double b_val, const double c_val) {
     a_ = a_val;
     b_ = b_val;
     c_ = c_val;
@@ -40,9 +40,9 @@ double Line::getA() const { return a_; }
 double Line::getB() const { return b_; }
 double Line::getC() const { return c_; }
 
-void Line::setA(double val) { a_ = val; }
-void Line::setB(double val) { b_ = val; }
-void Line::setC(double val) { c_ = val; }
+void Line::setA(const double val) { a_ = val; }
+void Line::setB(const double val) { b_ = val; }
+void Line::setC(const double val) { c_ = val; }
 
 bool Line::passesOrigin() const {
     return abs(c_) < EPS;
@@ -82,11 +82,11 @@ bool Line::isParallel(const Line& other) const {
     return parallelCheck && notIdentical;
 }
 
-bool Line::containsPoint(double x0, double y0) const {
+bool Line::containsPoint(const double x0, const double y0) const {
     return abs(a_ * x0 + b_ * y0 + c_) < EPS;
 }
 
-double Line::distanceToPoint(double x0, double y0) const {
+double Line::distanceToPoint(const double x0, const double y0) const {
     return abs(a_ * x0 + b_ * y0 + c_) / hypot(a_, b_);
 }
 
