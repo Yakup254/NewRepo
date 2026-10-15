@@ -96,7 +96,9 @@ bool Line::intersect(const Line& other, double& intersectX, double& intersectY) 
         return false;
     }
     intersectX = (b_ * other.c_ - other.b_ * c_) / D;
-    intersectY = (c_ * other.a_ - other.c_ * a_) / D;
+    intersectY = (other.a_ * c_ - a_ * other.c_) / D;
+    if (abs(intersectX) < EPS) intersectX = 0;
+    if (abs(intersectY) < EPS) intersectY = 0;
     return true;
 }
 
