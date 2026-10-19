@@ -14,12 +14,53 @@ bool isSorted(const vector<int>& arr) {
     return true;
 }
 
+//функция для ручного переворота массива шагов
+void reverseGaps(vector<int>& gaps) {
+    int start = 0;
+    int end = gaps.size() - 1;
+    while (start < end) {
+        int temp = gaps[start];
+        gaps[start] = gaps[end];
+        gaps[end] = temp;
+        start++;
+        end--;
+    }
+}
+
 void shellSortOriginal(vector<int>& arr) {
     int n = arr.size();
     vector<int> gaps;
     for (int gap = n / 2; gap > 0; gap /= 2) {
         gaps.push_back(gap);
     }
+    int t = gaps.size() - 1;
+
+    for (int i = 0; i <= t; ++i) {
+        int s = gaps[i];
+        for (int b = 0; b < s; ++b) {
+            for (int j = b + s; j < n; j += s) {
+                int x = arr[j];
+                int k = j - s;
+                while (k >= 0 && arr[k] > x) {
+                    arr[k + s] = arr[k];
+                    k = k - s;
+                }
+                arr[k + s] = x;
+            }
+        }
+    }
+}
+void shellSortHibbard(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> gaps;
+    int m = 1;
+    while (true) {
+        int gap = (1 << m) - 1; // Быстрое возведение в степень 2^m - 1
+        if (gap >= n) break;
+        gaps.push_back(gap);
+        m++;
+    }
+    reverseGaps(gaps); // Ручной переворот массива шагов
     int t = gaps.size() - 1;
 
     for (int i = 0; i <= t; ++i) {
@@ -80,12 +121,13 @@ int main() {
         {"array_1000000_10.txt", "array_1000000_1000.txt", "array_1000000_100000.txt"}
     };
 
-    cout << "Размер\tДиапазон\tшелла (мс)" << endl;
+    cout << "Размер\tДиапазон\tШелла (мс)\tХиббард (мс)" << endl;
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
             vector<int> currentArray = generateAndSaveArray(sizes[i], minVals[j], maxVals[j], filenames[i][j]);
             double tOriginal = measureAverageTime(currentArray, shellSortOriginal);
-            cout << sizes[i] << "\t[" << minVals[j] << ";" << maxVals[j] << "]\t" << tOriginal << endl;
+            double tHibbard = measureAverageTime(currentArray, shellSortHibbard);
+            cout << sizes[i] << "\t[" << minVals[j] << ";" << maxVals[j] << "]\t" << tOriginal << "\t\t" << tHibbard << endl;
         }
     }
     return 0;
