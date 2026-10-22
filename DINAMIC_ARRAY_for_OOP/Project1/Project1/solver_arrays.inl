@@ -272,6 +272,199 @@ template<typename ItemType> void DynamicArray<ItemType>::sort()
 }
 
 template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::begin()
+{
+    return iterator(arrayData_, 0);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::end()
+{
+    return iterator(arrayData_, arrayLength_);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::const_iterator DynamicArray<ItemType>::begin() const
+{
+    return const_iterator(arrayData_, 0);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::const_iterator DynamicArray<ItemType>::end() const
+{
+    return const_iterator(arrayData_, arrayLength_);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::const_iterator DynamicArray<ItemType>::cbegin() const
+{
+    return const_iterator(arrayData_, 0);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::const_iterator DynamicArray<ItemType>::cend() const
+{
+    return const_iterator(arrayData_, arrayLength_);
+}
+
+
+template<typename ItemType>
+DynamicArray<ItemType>::iterator::iterator(ItemType* arrayData, int elementIndex)
+    : arrayData_(arrayData), elementIndex_(elementIndex)
+{
+}
+
+template<typename ItemType>
+bool DynamicArray<ItemType>::iterator::operator==(const iterator& other) const
+{
+    return elementIndex_ == other.elementIndex_ && arrayData_ == other.arrayData_;
+}
+
+template<typename ItemType>
+bool DynamicArray<ItemType>::iterator::operator!=(const iterator& other) const
+{
+    return !(*this == other);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator& DynamicArray<ItemType>::iterator::operator++()
+{
+    elementIndex_++;
+    return *this;
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::iterator::operator++(int)
+{
+    iterator temp = *this;
+    elementIndex_++;
+    return temp;
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::iterator::operator+(int n) const
+{
+    return iterator(arrayData_, elementIndex_ + n);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::iterator::operator-(int n) const
+{
+    return iterator(arrayData_, elementIndex_ - n);
+}
+
+template<typename ItemType>
+int DynamicArray<ItemType>::iterator::operator-(const iterator& other) const
+{
+    return elementIndex_ - other.elementIndex_;
+}
+
+template<typename ItemType>
+ItemType& DynamicArray<ItemType>::iterator::operator*()
+{
+    return arrayData_[elementIndex_];
+}
+
+template<typename ItemType>
+ItemType* DynamicArray<ItemType>::iterator::operator->()
+{
+    return &arrayData_[elementIndex_];
+}
+
+template<typename ItemType>
+int DynamicArray<ItemType>::iterator::getIndex() const
+{
+    return elementIndex_;
+}
+
+template<typename ItemType>
+DynamicArray<ItemType>::const_iterator::const_iterator(const ItemType* arrayData, int elementIndex)
+    : arrayData_(arrayData), elementIndex_(elementIndex)
+{
+}
+
+template<typename ItemType>
+bool DynamicArray<ItemType>::const_iterator::operator==(const const_iterator& other) const
+{
+    return elementIndex_ == other.elementIndex_ && arrayData_ == other.arrayData_;
+}
+
+template<typename ItemType>
+bool DynamicArray<ItemType>::const_iterator::operator!=(const const_iterator& other) const
+{
+    return !(*this == other);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::const_iterator& DynamicArray<ItemType>::const_iterator::operator++()
+{
+    elementIndex_++;
+    return *this;
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::const_iterator DynamicArray<ItemType>::const_iterator::operator+(int n) const
+{
+    return const_iterator(arrayData_, elementIndex_ + n);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::const_iterator DynamicArray<ItemType>::const_iterator::operator-(int n) const
+{
+    return const_iterator(arrayData_, elementIndex_ - n);
+}
+
+template<typename ItemType>
+int DynamicArray<ItemType>::const_iterator::operator-(const const_iterator& other) const
+{
+    return elementIndex_ - other.elementIndex_;
+}
+
+template<typename ItemType>
+const ItemType& DynamicArray<ItemType>::const_iterator::operator*() const
+{
+    return arrayData_[elementIndex_];
+}
+
+template<typename ItemType>
+const ItemType* DynamicArray<ItemType>::const_iterator::operator->() const
+{
+    return &arrayData_[elementIndex_];
+}
+
+template<typename ItemType>
+int DynamicArray<ItemType>::const_iterator::getIndex() const
+{
+    return elementIndex_;
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::erase(const_iterator pos)
+{
+    int index = pos.getIndex();
+    removeAt(index);
+    return iterator(arrayData_, index);
+}
+
+template<typename ItemType>
+typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::erase(const_iterator first, const_iterator last)
+{
+    int firstIdx = first.getIndex();
+    int lastIdx = last.getIndex();
+    int numToRemove = lastIdx - firstIdx;
+
+    for (int i = firstIdx; i < arrayLength_ - numToRemove; i++)
+    {
+        arrayData_[i] = std::move(arrayData_[i + numToRemove]);
+    }
+
+    arrayLength_ -= numToRemove;
+    shrinkToFitIfNeeded();
+    return iterator(arrayData_, firstIdx);
+}
+
+
+template<typename ItemType>
 std::ostream& operator<<(std::ostream& outputStream, const DynamicArray<ItemType>& arrayRef)
 {
     outputStream << "[";

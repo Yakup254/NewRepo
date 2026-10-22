@@ -7,6 +7,9 @@ template<typename ItemType>
 class DynamicArray
 {
 public:
+    class iterator;
+    class const_iterator;
+
     DynamicArray();
     DynamicArray(const ItemType* const arrayData, const int arrayLength);
     DynamicArray(const DynamicArray& other);
@@ -41,7 +44,15 @@ public:
     bool removeValue(const ItemType& item);
     void removeAll(const ItemType& item);
 
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
+    const_iterator cbegin() const;
+    const_iterator cend() const;
 
+    iterator erase(const_iterator pos);
+    iterator erase(const_iterator first, const_iterator last);
 
 private:
     void reserve(const int newCapacity);
@@ -50,6 +61,51 @@ private:
     ItemType* arrayData_ = nullptr;
     int arrayLength_ = 0;
     int arrayCapacity_ = 0;
+};
+
+template<typename ItemType>
+class DynamicArray<ItemType>::iterator
+{
+public:
+    iterator() = default;
+    iterator(ItemType* arrayData, int elementIndex);
+
+    bool operator==(const iterator& other) const;
+    bool operator!=(const iterator& other) const;
+    iterator& operator++();
+    iterator operator++(int);
+    iterator operator+(int n) const;
+    iterator operator-(int n) const;
+    int operator-(const iterator& other) const;
+    ItemType& operator*();
+    ItemType* operator->();
+    int getIndex() const;
+
+private:
+    ItemType* arrayData_ = nullptr;
+    int elementIndex_ = 0;
+};
+
+template<typename ItemType>
+class DynamicArray<ItemType>::const_iterator
+{
+public:
+    const_iterator() = default;
+    const_iterator(const ItemType* arrayData, int elementIndex);
+
+    bool operator==(const const_iterator& other) const;
+    bool operator!=(const const_iterator& other) const;
+    const_iterator& operator++();
+    const_iterator operator+(int n) const;
+    const_iterator operator-(int n) const;
+    int operator-(const const_iterator& other) const;
+    const ItemType& operator*() const;
+    const ItemType* operator->() const;
+    int getIndex() const;
+
+private:
+    const ItemType* arrayData_ = nullptr;
+    int elementIndex_ = 0;
 };
 
 template<typename ItemType>
