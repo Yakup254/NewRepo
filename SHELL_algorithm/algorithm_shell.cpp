@@ -190,14 +190,22 @@ int main() {
         {"array_1000000_10.txt", "array_1000000_1000.txt", "array_1000000_100000.txt"}
     };
 
+    int mode;
+    cin >> mode;
+    if (mode == 0) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j)
+            {
+                generateAndSaveArray(sizes[i], minVals[j], maxVals[j], filenames[i][j]);
+            }
+        }
+    }
+    else { 
+        cout << "use from file" << endl;
+    }
+
    cout << "Размер\tДиапазон\tШелла (мс)\tХиббард (мс)\tКнут (мс)\tСеджвик (мс)" << endl;
    cout << "- - --- - - - -- - - - - - -- - - - - -- - - - - - - -- - - -" << endl;
-   for (int i = 0; i < 3; ++i) {
-       for (int j = 0; j < 3; ++j) 
-       {
-           generateAndSaveArray(sizes[i], minVals[j], maxVals[j], filenames[i][j]);
-       }
-   }
    for (int i = 0; i < 3; ++i) {
        for (int j = 0; j < 3; ++j) {
            vector<int> currentArray = loadArrayFromFile(filenames[i][j], sizes[i]);
