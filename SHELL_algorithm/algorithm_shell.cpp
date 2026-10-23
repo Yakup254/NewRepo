@@ -3,10 +3,11 @@
 #include <random>
 #include <chrono>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
-// Проверка массива
+// Проверка отсортированного  массива
 bool isSorted(const vector<int>& arr) {
     for (size_t i = 1; i < arr.size(); ++i) {
         if (arr[i - 1] > arr[i]) return false;
@@ -79,6 +80,67 @@ void shellSortHibbard(vector<int>& arr) {
     }
 }
 
+void shellSortKnuth(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> gaps;
+    int gap = 1;
+    while (gap < n) {
+        gaps.push_back(gap);
+        gap = 3 * gap + 1;
+    }
+
+    reverseGaps(gaps);
+    int t = gaps.size() - 1;
+    for (int i = 0; i <= t; ++i) {
+        int s = gaps[i];
+        for (int b = 0; b < s; ++b) {
+            for (int j = b + s; j < n; j += s) {
+                int x = arr[j];
+                int k = j - s;
+                while (k >= 0 && arr[k] > x) {
+                    arr[k + s] = arr[k];
+                    k = k - s;
+                }
+                arr[k + s] = x;
+            }
+        }
+    }
+}
+void shellSortSedgewick(vector<int>& arr) {
+    int n = arr.size();
+    vector<int> gaps;
+    int i = 0;
+    while (true) {
+        int gap;
+        if (i % 2 == 0) {
+            gap = 9 * (1 << i) - 9 * (1 << (i / 2)) + 1;
+        }
+        else {
+            gap = 8 * (1 << i) - 6 * (1 << ((i + 1) / 2)) + 1;
+        }
+
+        if (gap >= n) break;
+        gaps.push_back(gap);
+        i++;
+    }
+
+    reverseGaps(gaps);
+    int t = gaps.size() - 1;
+    for (int idx = 0; idx <= t; ++idx) {
+        int s = gaps[idx];
+        for (int b = 0; b < s; ++b) {
+            for (int j = b + s; j < n; j += s) {
+                int x = arr[j];
+                int k = j - s;
+                while (k >= 0 && arr[k] > x) {
+                    arr[k + s] = arr[k];
+                    k = k - s;
+                }
+                arr[k + s] = x;
+            }
+        }
+    }
+}
 // Генерация случайных чисел
 vector<int> generateAndSaveArray(int size, int minVal, int maxVal, const char* filename) {
     vector<int> arr(size);
@@ -121,13 +183,17 @@ int main() {
         {"array_1000000_10.txt", "array_1000000_1000.txt", "array_1000000_100000.txt"}
     };
 
-    cout << "Размер\tДиапазон\tШелла (мс)\tХиббард (мс)" << endl;
-    for (int i = 0; i < 3; ++i) {
+   cout << "Размер\tДиапазон\tШелла (мс)\tХиббард (мс)\tКнут (мс)\tСеджвик (мс)" << endl;
+   cout << "- - --- - - - -- - - - - - -- - - - - -- - - - - - - -- - - -" << endl;
+   for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
             vector<int> currentArray = generateAndSaveArray(sizes[i], minVals[j], maxVals[j], filenames[i][j]);
-            double tOriginal = measureAverageTime(currentArray, shellSortOriginal);
+            double tOriginalShell = measureAverageTime(currentArray, shellSortOriginal);
             double tHibbard = measureAverageTime(currentArray, shellSortHibbard);
-            cout << sizes[i] << "\t[" << minVals[j] << ";" << maxVals[j] << "]\t" << tOriginal << "\t\t" << tHibbard << endl;
+            double tKnuth = measureAverageTime(currentArray, shellSortKnuth);
+            double tSedgewick = measureAverageTime(currentArray, shellSortSedgewick);
+            cout << sizes[i] << "\t[" << minVals[j] << ";" << maxVals[j] << "]\t"
+                << tOriginalShell << "\t\t" << tHibbard << "\t\t" << tKnuth << "\t\t" << tSedgewick << endl;
         }
     }
     return 0;
