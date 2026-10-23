@@ -142,21 +142,28 @@ void shellSortSedgewick(vector<int>& arr) {
     }
 }
 // Генерация случайных чисел
-vector<int> generateAndSaveArray(int size, int minVal, int maxVal, const char* filename) {
-    vector<int> arr(size);
+void generateAndSaveArray(int size, int minVal, int maxVal, const char* filename) {
     mt19937 gen(1337);
     uniform_int_distribution<int> dis(minVal, maxVal);
     ofstream fout(filename);
     for (int i = 0; i < size; ++i) {
-        arr[i] = dis(gen);
-        fout << arr[i];
+        fout << dis(gen);
         if (i != size - 1) {
             fout << " ";
         }
     }
     fout.close();
-    return arr;
 }
+    vector<int> loadArrayFromFile(const char* filename, int size) {
+        vector<int> arr(size);
+        ifstream fin(filename);
+        for (int i = 0; i < size; ++i) {
+            fin >> arr[i];
+        }
+        fin.close();
+        return arr;
+    }
+
 
 double measureAverageTime(const vector<int>& originalArr, void (*sortFunc)(vector<int>&)) {
     double totalDuration = 0;
@@ -186,8 +193,14 @@ int main() {
    cout << "Размер\tДиапазон\tШелла (мс)\tХиббард (мс)\tКнут (мс)\tСеджвик (мс)" << endl;
    cout << "- - --- - - - -- - - - - - -- - - - - -- - - - - - - -- - - -" << endl;
    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            vector<int> currentArray = generateAndSaveArray(sizes[i], minVals[j], maxVals[j], filenames[i][j]);
+       for (int j = 0; j < 3; ++j) 
+       {
+           generateAndSaveArray(sizes[i], minVals[j], maxVals[j], filenames[i][j]);
+       }
+   }
+   for (int i = 0; i < 3; ++i) {
+       for (int j = 0; j < 3; ++j) {
+           vector<int> currentArray = loadArrayFromFile(filenames[i][j], sizes[i]);
             double tOriginalShell = measureAverageTime(currentArray, shellSortOriginal);
             double tHibbard = measureAverageTime(currentArray, shellSortHibbard);
             double tKnuth = measureAverageTime(currentArray, shellSortKnuth);
