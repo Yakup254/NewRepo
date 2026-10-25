@@ -127,7 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IntDinamicArray.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClInclude Include="IntDinamicArray.h" />
     <ClInclude Include="solver_arrays.inl">
       <FileType>Document</FileType>
     </ClInclude>

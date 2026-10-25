@@ -18,6 +18,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="IntDinamicArray.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="solver_dynamic_array.h">
@@ -25,6 +28,9 @@
     </ClInclude>
     <ClInclude Include="solver_arrays.inl">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="IntDinamicArray.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
