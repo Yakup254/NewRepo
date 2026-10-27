@@ -267,8 +267,38 @@ ItemType DynamicArray<ItemType>::findMax() const
     return maxValue;
 }
 template<typename ItemType> void DynamicArray<ItemType>::sort() 
-{ 
-    std::sort(arrayData_, arrayData_ + arrayLength_); 
+{
+    int n = arrayLength_;
+    if (n <= 1) return;
+
+    int gapCount = 0;
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        gapCount++;
+    }
+
+    int* gaps = new int[gapCount];
+    int idx = 0;
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        gaps[idx++] = gap;
+    }
+    int t = gapCount - 1;
+
+    for (int i = 0; i <= t; ++i) {
+        int s = gaps[i];
+        for (int b = 0; b < s; ++b) {
+            for (int j = b + s; j < n; j += s) {
+                ItemType x = arrayData_[j];
+                int k = j - s;
+                while (k >= 0 && arrayData_[k] > x) {
+                    arrayData_[k + s] = arrayData_[k];
+                    k = k - s;
+                }
+                arrayData_[k + s] = x;
+            }
+        }
+    }
+
+    delete[] gaps;
 }
 
 template<typename ItemType>
