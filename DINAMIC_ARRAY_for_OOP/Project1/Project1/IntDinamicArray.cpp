@@ -418,6 +418,41 @@ IntDynamicArray::iterator IntDynamicArray::erase(const_iterator first, const_ite
     return iterator(arrayData_, firstIdx);
 }
 
+void IntDynamicArray::input()
+{
+    int count = 0;
+    std::cout << "input for add numbers: ";
+    if (std::cin >> count && count > 0)
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            int value = 0;
+            std::cout << "Element (" << i << "): ";
+            std::cin >> value;
+            *this += value;
+        }
+    }
+}
+
+void IntDynamicArray::output() const
+{
+    std::cout << "[";
+    for (int index = 0; index < arrayLength_; index++)
+    {
+        std::cout << arrayData_[index];
+        if (index < arrayLength_ - 1)
+            std::cout << ", ";
+    }
+    std::cout << "]" << std::endl;
+}
+bool IntDynamicArray::insert(const_iterator pos, const int item)
+{
+    int index = pos.getIndex(); 
+    return insertAt(index, item);
+}
+
+
+
 std::ostream& operator<<(std::ostream& outputStream, const IntDynamicArray& arrayRef)
 {
     outputStream << "[";

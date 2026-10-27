@@ -463,6 +463,43 @@ typename DynamicArray<ItemType>::iterator DynamicArray<ItemType>::erase(const_it
     return iterator(arrayData_, firstIdx);
 }
 
+template<typename ItemType>
+void DynamicArray<ItemType>::input()
+{
+    int count = 0;
+    std::cout << "input for add numbers: ";
+    if (std::cin >> count && count > 0)
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            ItemType value;
+            std::cout << "Element (" << i << "): ";
+            std::cin >> value;
+            *this += value;
+        }
+    }
+}
+
+template<typename ItemType>
+void DynamicArray<ItemType>::output() const
+{
+    std::cout << "[";
+    for (int index = 0; index < arrayLength_; index++)
+    {
+        std::cout << arrayData_[index];
+        if (index < arrayLength_ - 1)
+            std::cout << ", ";
+    }
+    std::cout << "]" << std::endl;
+}
+
+template<typename ItemType>
+bool DynamicArray<ItemType>::insert(const_iterator pos, const ItemType& item)
+{
+    int index = pos.getIndex();
+    return insertAt(index, item); 
+}
+
 
 template<typename ItemType>
 std::ostream& operator<<(std::ostream& outputStream, const DynamicArray<ItemType>& arrayRef)

@@ -9,6 +9,9 @@ public:
     class iterator;
     class const_iterator;
 
+    void input();
+    void output() const;
+
     IntDynamicArray();
     IntDynamicArray(const int* const arrayData, const int arrayLength);
     IntDynamicArray(const IntDynamicArray& other);
@@ -40,6 +43,7 @@ public:
 
     bool insertAt(const int index, const int item);
     bool removeAt(const int index);
+    bool insert(const_iterator pos, const int item);
     bool removeValue(const int item);
     void removeAll(const int item);
 
