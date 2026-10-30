@@ -495,3 +495,20 @@ std::ostream& operator<<(std::ostream& outputStream, const IntDynamicArray& arra
     }
     outputStream << "]"; return outputStream;
 }
+template<typename ItemType>
+std::istream& operator>>(std::istream& inputStream, IntDynamicArray& arrayRef)
+{
+    int count = 0;
+    std::cout << "input for add numbers: ";
+    if (inputStream >> count && count > 0)
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            ItemType value;
+            std::cout << "Element (" << i << "): ";
+            inputStream >> value;
+            arrayRef += value;
+        }
+    }
+    return inputStream;
+}

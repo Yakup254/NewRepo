@@ -114,5 +114,8 @@ private:
 
 template<typename ItemType>
 std::ostream& operator<<(std::ostream& outputStream, const DynamicArray<ItemType>& arrayRef);
+template<typename ItemType>
+std::istream& operator>>(std::istream& inputStream, DynamicArray<ItemType>& arrayRef);
+
 
 #include "solver_arrays.inl"

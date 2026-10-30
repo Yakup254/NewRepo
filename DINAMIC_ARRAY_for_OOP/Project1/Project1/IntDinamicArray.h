@@ -109,3 +109,4 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& outputStream, const IntDynamicArray& arrayRef);
+std::istream& operator>>(std::istream& inputStream, IntDynamicArray& arrayRef);
