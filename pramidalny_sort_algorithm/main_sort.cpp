@@ -123,7 +123,7 @@ int main() {
             }
         }
     }
-    else {
+    else 
         cout << "\nРазмер\tДиапазон\tHeap Sort (мс)" << endl;
         cout << "- - -- --- - - -- -- - - - -- -- - - - - - " << endl;
 
@@ -134,7 +134,7 @@ int main() {
                 double tHeap = measureAverageTime(currentArray);
                 cout << sizes[i] << "\t[" << minVals[j] << ";" << maxVals[j] << "]\t" << tHeap << endl;
             }
-        }
+        
     }
     return 0;
 }
