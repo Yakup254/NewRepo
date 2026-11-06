@@ -34,6 +34,27 @@ int main()
     invertTest.invertBit(1);
     std::cout << "Vector after invertBit  : " << invertTest << std::endl;
     std::cout << "New bit status at idx 1   : " << invertTest[1] << std::endl;
+    std::cout << std::endl;
 
+    BooleanVector shiftVector("00001111");
+    std::cout << "Original vector : " << shiftVector << std::endl;
+    std::cout << "Shift left  (<<2): " << (shiftVector << 2) << std::endl;
+    std::cout << "Shift right (>>2): " << (shiftVector >> 2) << std::endl;
+    
+    BooleanVector rangeVector(12, false);
+    std::cout << "Initial zeros   : " << rangeVector << std::endl;
+
+    rangeVector.setRange(4, 5, true);
+    std::cout << "After setRange  : " << rangeVector << std::endl;
+
+    BooleanVector bitRefVector("00000000");
+    std::cout << "Initial vector  : " << bitRefVector << std::endl;
+
+    bitRefVector[2] |= true;
+    bitRefVector[5] ^= true;
+    std::cout << "After |= and ^= : " << bitRefVector << std::endl;
+    std::cout << "Total bits count: " << bitRefVector.getBitsCount() << std::endl;
+    std::cout << "Vector weight   : " << bitRefVector.weight() << std::endl;
+    
     return 0;
 }

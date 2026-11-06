@@ -26,6 +26,7 @@ BooleanVector::BooleanVector(const uint32_t numBits, const bool initialValue)
     {
         vectorData_[byteIndex] = fillByte;
     }
+    clearUnusedBits();
 }
 
 BooleanVector::BooleanVector(const char* bitString)
@@ -55,6 +56,7 @@ BooleanVector::BooleanVector(const char* bitString)
             setValue(i, true);
         }
     }
+    clearUnusedBits();
 }
 
 BooleanVector::BooleanVector(const BooleanVector& other)
@@ -171,12 +173,32 @@ void BooleanVector::setValue(const uint32_t bitIndex, const bool newValue)
         vectorData_[byteIndex] &= ~(1 << bitWithinByte);
 }
 
+void BooleanVector::setRange(const uint32_t startIndex, const uint32_t count, const bool newValue)
+{
+    assert((startIndex + count <= numBits_) && "Range is out of vector bounds.");
+    for (uint32_t i = startIndex; i < startIndex + count; ++i)
+    {
+        setValue(i, newValue);
+    }
+}
+
+void BooleanVector::setAll(const bool newValue)
+{
+    uint8_t fillByte = newValue ? 0xFF : 0x00;
+    for (uint32_t i = 0; i < numBytes_; ++i)
+    {
+        vectorData_[i] = fillByte;
+    }
+    clearUnusedBits();
+}
+
 void BooleanVector::invertAll()
 {
     for (uint32_t i = 0; i < numBytes_; ++i)
     {
         vectorData_[i] = ~vectorData_[i];
     }
+    clearUnusedBits();
 }
 
 void BooleanVector::invertBit(const uint32_t bitIndex)
@@ -186,6 +208,7 @@ void BooleanVector::invertBit(const uint32_t bitIndex)
     uint32_t bitWithinByte = bitIndex % 8;
 
     vectorData_[byteIndex] ^= (1 << bitWithinByte);
+    clearUnusedBits();
 }
 
 void BooleanVector::swap(BooleanVector& other) noexcept
@@ -195,6 +218,15 @@ void BooleanVector::swap(BooleanVector& other) noexcept
     std::swap(numBytes_, other.numBytes_);
 }
 
+void BooleanVector::clearUnusedBits()
+{
+    uint32_t remainder = numBits_ % 8;
+    if (remainder != 0 && numBytes_ > 0)
+    {
+        uint8_t mask = (1 << remainder) - 1;
+        vectorData_[numBytes_ - 1] &= mask;
+    }
+}
 
 bool BooleanVector::operator[](const uint32_t bitIndex) const
 {
@@ -281,6 +313,57 @@ BooleanVector& BooleanVector::operator^=(const BooleanVector& other)
     return *this;
 }
 
+
+
+BooleanVector BooleanVector::operator<<(const uint32_t shiftCount) const
+{
+    BooleanVector result(numBits_, false);
+    if (shiftCount >= numBits_)
+    {
+        return result;
+    }
+
+    for (uint32_t i = numBits_; i > shiftCount; --i)
+    {
+        uint32_t targetIndex = i - 1;
+        if (getBit(targetIndex - shiftCount))
+        {
+            result.setValue(targetIndex, true);
+        }
+    }
+    return result;
+}
+
+BooleanVector& BooleanVector::operator<<=(const uint32_t shiftCount)
+{
+    *this = *this << shiftCount;
+    return *this;
+}
+
+BooleanVector BooleanVector::operator>>(const uint32_t shiftCount) const
+{
+    BooleanVector result(numBits_, false);
+    if (shiftCount >= numBits_)
+    {
+        return result;
+    }
+
+    for (uint32_t i = 0; i < numBits_ - shiftCount; ++i)
+    {
+        if (getBit(i + shiftCount))
+        {
+            result.setValue(i, true);
+        }
+    }
+    return result;
+}
+
+BooleanVector& BooleanVector::operator>>=(const uint32_t shiftCount)
+{
+    *this = *this >> shiftCount;
+    return *this;
+}
+
 bool BooleanVector::operator==(const BooleanVector& other) const
 {
     if (numBits_ != other.numBits_) return false;
@@ -321,6 +404,23 @@ BooleanVector::BitReference& BooleanVector::BitReference::operator=(const BitRef
     return *this = static_cast<bool>(rhs);
 }
 
+BooleanVector::BitReference& BooleanVector::BitReference::operator&=(const bool val)
+{
+    bool current = *this;
+    return *this = (current & val);
+}
+
+BooleanVector::BitReference& BooleanVector::BitReference::operator|=(const bool val)
+{
+    bool current = *this;
+    return *this = (current | val);
+}
+
+BooleanVector::BitReference& BooleanVector::BitReference::operator^=(const bool val)
+{
+    bool current = *this;
+    return *this = (current ^ val);
+}
 
 std::istream& operator>>(std::istream& inputStream, BooleanVector& booleanVector)
 {
