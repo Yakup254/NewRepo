@@ -1,5 +1,6 @@
 #include "BooleanVector.h"
 #include <iostream>
+#include <sstream>
 
 int main()
 {
@@ -55,6 +56,13 @@ int main()
     std::cout << "After |= and ^= : " << bitRefVector << std::endl;
     std::cout << "Total bits count: " << bitRefVector.getBitsCount() << std::endl;
     std::cout << "Vector weight   : " << bitRefVector.weight() << std::endl;
+
+    std::stringstream StreamInputNumber;
+    BooleanVector strVector;
+    StreamInputNumber << "11100011";
+    StreamInputNumber >> strVector;
+
+    std::cout << "Vector read from stream: " << strVector << std::endl;
     
     return 0;
 }
