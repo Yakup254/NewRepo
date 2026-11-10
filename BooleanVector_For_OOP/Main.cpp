@@ -38,8 +38,8 @@ int main()
 
     BooleanVector shiftVector("00001111");
     std::cout << "Original vector : " << shiftVector << std::endl;
-    std::cout << "Shift left  (<<2): " << (shiftVector << 2) << std::endl;
-    std::cout << "Shift right (>>2): " << (shiftVector >> 2) << std::endl;
+    std::cout << "Shift left  (>>2): " << (shiftVector >> 2) << std::endl;
+    std::cout << "Shift right (<<2): " << (shiftVector << 2) << std::endl;
     
     BooleanVector rangeVector(12, false);
     std::cout << "Initial zeros   : " << rangeVector << std::endl;

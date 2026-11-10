@@ -20,7 +20,6 @@ public:
     BooleanVector& operator=(BooleanVector&& other) noexcept;
 
     uint32_t getBitsCount() const;
-    uint32_t getBytesCount() const;
     uint32_t weight() const;
 
     bool getBit(const uint32_t bitIndex) const;
@@ -61,6 +60,8 @@ private:
     uint32_t numBits_ = 0;
     uint32_t numBytes_ = 0;
 
+
+    uint32_t getBytesCount() const;
     void clearUnusedBits();
 };
 

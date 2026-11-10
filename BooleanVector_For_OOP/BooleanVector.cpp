@@ -315,7 +315,7 @@ BooleanVector& BooleanVector::operator^=(const BooleanVector& other)
 
 
 
-BooleanVector BooleanVector::operator<<(const uint32_t shiftCount) const
+BooleanVector BooleanVector::operator>>(const uint32_t shiftCount) const
 {
     BooleanVector result(numBits_, false);
     if (shiftCount >= numBits_)
@@ -340,7 +340,7 @@ BooleanVector& BooleanVector::operator<<=(const uint32_t shiftCount)
     return *this;
 }
 
-BooleanVector BooleanVector::operator>>(const uint32_t shiftCount) const
+BooleanVector BooleanVector::operator<<(const uint32_t shiftCount) const
 {
     BooleanVector result(numBits_, false);
     if (shiftCount >= numBits_)
@@ -426,6 +426,12 @@ std::istream& operator>>(std::istream& inputStream, BooleanVector& booleanVector
 {
     std::string bitString;
     inputStream >> bitString;
+    for (uint32_t i = 0; i < bitString.length(); ++i)
+    {
+        char c = bitString[i];
+        assert((c == '0' || c == '1') && "Error: 0 and 1.");
+    }
+
     booleanVector = BooleanVector(bitString.c_str());
     return inputStream;
 }
