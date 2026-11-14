@@ -25,6 +25,14 @@ public:
     uint32_t getColumnsCount() const;
 
     uint32_t getWeight() const;
+    uint32_t getRowWeight(const uint32_t rowIndex) const;
+
+    void invertComponent(const uint32_t rowIndex, const uint32_t colIndex);
+    void invertComponents(const uint32_t rowIndex, const uint32_t startColIndex, const uint32_t count);
+
+    void setComponent(const uint32_t rowIndex, const uint32_t colIndex, const bool value);
+    void setComponents(const uint32_t rowIndex, const uint32_t startColIndex, const uint32_t count, const bool value);
+
 
     BooleanVector& operator[](const uint32_t rowIndex);
     const BooleanVector& operator[](const uint32_t rowIndex) const;

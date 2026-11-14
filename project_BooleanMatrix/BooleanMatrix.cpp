@@ -62,6 +62,43 @@ uint32_t BooleanMatrix::getWeight() const
 }
 
 
+uint32_t BooleanMatrix::getRowWeight(const uint32_t rowIndex) const
+{
+    assert(rowIndex < getRowsCount() && "Row index is out of range.");
+    return matrixData_[rowIndex].weight();
+}
+
+void BooleanMatrix::invertComponent(const uint32_t rowIndex, const uint32_t colIndex)
+{
+    assert(rowIndex < getRowsCount() && "Row index is out of range.");
+    matrixData_[rowIndex].invertBit(colIndex);
+}
+
+void BooleanMatrix::invertComponents(const uint32_t rowIndex, const uint32_t startColIndex, const uint32_t count)
+{
+    assert(rowIndex < getRowsCount() && "Row index is out of range.");
+    assert(startColIndex + count <= getColumnsCount() && "Range is out of row bounds.");
+
+    for (uint32_t i = 0; i < count; ++i)
+    {
+        matrixData_[rowIndex].invertBit(startColIndex + i);
+    }
+}
+
+void BooleanMatrix::setComponent(const uint32_t rowIndex, const uint32_t colIndex, const bool value)
+{
+    assert(rowIndex < getRowsCount() && "Row index is out of range.");
+    matrixData_[rowIndex].setValue(colIndex, value);
+}
+
+void BooleanMatrix::setComponents(const uint32_t rowIndex, const uint32_t startColIndex, const uint32_t count, const bool value)
+{
+    assert(rowIndex < getRowsCount() && "Row index is out of range.");
+    matrixData_[rowIndex].setRange(startColIndex, count, value);
+}
+
+
+
 BooleanVector& BooleanMatrix::operator[](const uint32_t rowIndex)
 {
     assert(rowIndex < getRowsCount() && "Row index is out of range.");
