@@ -51,6 +51,37 @@ int main()
     std::cout << "Satir sayisi: " << testMatrix2.getRowsCount() << std::endl;
     std::cout << "Sutun sayisi: " << testMatrix2.getColumnsCount() << std::endl;
     std::cout << testMatrix2 << std::endl;
+    const char* rawA[] = {
+       "10101",
+       "11100",
+       "10011"
+    };
+    const char* rawB[] = {
+        "11001",
+        "01010",
+        "10101"
+    };
+
+    BooleanMatrix A(rawA, 3, 5);
+    BooleanMatrix B(rawB, 3, 5);
+
+    std::cout << "Matrix A:" << std::endl << A;
+    std::cout << "Matrix B:" << std::endl << B;
+
+    std::cout << "All rows conjunction (A): " << A.getAllRowsConjunction() << std::endl;
+    std::cout << "All rows disjunction (A): " << A.getAllRowsDisjunction() << std::endl;
+
+    std::cout << "A & B:" << std::endl << (A & B);
+    std::cout << "A | B:" << std::endl << (A | B);
+    std::cout << "A ^ B:" << std::endl << (A ^ B);
+    std::cout << "~A:" << std::endl << (~A) << std::endl;
+
+    std::cout << "Enter matrix (rows cols, then 0/1 bits): ";
+    BooleanMatrix userMatrix;
+    if (std::cin >> userMatrix)
+    {
+        std::cout << "Your matrix (weight = " << userMatrix.getWeight() << "):" << std::endl << userMatrix;
+    }
 
 
 
