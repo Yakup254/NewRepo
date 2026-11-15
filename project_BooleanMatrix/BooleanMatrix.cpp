@@ -68,6 +68,38 @@ uint32_t BooleanMatrix::getRowWeight(const uint32_t rowIndex) const
     return matrixData_[rowIndex].weight();
 }
 
+BooleanVector BooleanMatrix::getAllRowsConjunction() const
+{
+    const uint32_t numRows = getRowsCount();
+    if (numRows == 0)
+    {
+        return BooleanVector();
+    }
+
+    BooleanVector result = matrixData_[0];
+    for (uint32_t rowIndex = 1; rowIndex < numRows; ++rowIndex)
+    {
+        result &= matrixData_[rowIndex];
+    }
+    return result;
+}
+
+BooleanVector BooleanMatrix::getAllRowsDisjunction() const
+{
+    const uint32_t numRows = getRowsCount();
+    if (numRows == 0)
+    {
+        return BooleanVector();
+    }
+
+    BooleanVector result = matrixData_[0];
+    for (uint32_t rowIndex = 1; rowIndex < numRows; ++rowIndex)
+    {
+        result |= matrixData_[rowIndex];
+    }
+    return result;
+}
+
 void BooleanMatrix::invertComponent(const uint32_t rowIndex, const uint32_t colIndex)
 {
     assert(rowIndex < getRowsCount() && "Row index is out of range.");
@@ -111,7 +143,74 @@ const BooleanVector& BooleanMatrix::operator[](const uint32_t rowIndex) const
     return matrixData_[rowIndex];
 }
 
+BooleanMatrix& BooleanMatrix::operator&=(const BooleanMatrix& other)
+{
+    assert(getRowsCount() == other.getRowsCount() && getColumnsCount() == other.getColumnsCount() && "Matrices must have equal dimensions.");
+    const uint32_t numRows = getRowsCount();
 
+    for (uint32_t rowIndex = 0; rowIndex < numRows; ++rowIndex)
+    {
+        matrixData_[rowIndex] &= other.matrixData_[rowIndex];
+    }
+    return *this;
+}
+
+BooleanMatrix BooleanMatrix::operator&(const BooleanMatrix& other) const
+{
+    BooleanMatrix result(*this);
+    result &= other;
+    return result;
+}
+
+BooleanMatrix& BooleanMatrix::operator|=(const BooleanMatrix& other)
+{
+    assert(getRowsCount() == other.getRowsCount() && getColumnsCount() == other.getColumnsCount() && "Matrices must have equal dimensions.");
+    const uint32_t numRows = getRowsCount();
+
+    for (uint32_t rowIndex = 0; rowIndex < numRows; ++rowIndex)
+    {
+        matrixData_[rowIndex] |= other.matrixData_[rowIndex];
+    }
+    return *this;
+}
+
+BooleanMatrix BooleanMatrix::operator|(const BooleanMatrix& other) const
+{
+    BooleanMatrix result(*this);
+    result |= other;
+    return result;
+}
+
+BooleanMatrix& BooleanMatrix::operator^=(const BooleanMatrix& other)
+{
+    assert(getRowsCount() == other.getRowsCount() && getColumnsCount() == other.getColumnsCount() && "Matrices must have equal dimensions.");
+    const uint32_t numRows = getRowsCount();
+
+    for (uint32_t rowIndex = 0; rowIndex < numRows; ++rowIndex)
+    {
+        matrixData_[rowIndex] ^= other.matrixData_[rowIndex];
+    }
+    return *this;
+}
+
+BooleanMatrix BooleanMatrix::operator^(const BooleanMatrix& other) const
+{
+    BooleanMatrix result(*this);
+    result ^= other;
+    return result;
+}
+
+BooleanMatrix BooleanMatrix::operator~() const
+{
+    BooleanMatrix result(*this);
+    const uint32_t numRows = getRowsCount();
+
+    for (uint32_t rowIndex = 0; rowIndex < numRows; ++rowIndex)
+    {
+        result.matrixData_[rowIndex].invertAll();
+    }
+    return result;
+}
 
 std::istream& operator>>(std::istream& inputStream, BooleanMatrix& matrix)
 {

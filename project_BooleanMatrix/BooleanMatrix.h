@@ -27,6 +27,9 @@ public:
     uint32_t getWeight() const;
     uint32_t getRowWeight(const uint32_t rowIndex) const;
 
+    BooleanVector getAllRowsConjunction() const;
+    BooleanVector getAllRowsDisjunction() const;
+
     void invertComponent(const uint32_t rowIndex, const uint32_t colIndex);
     void invertComponents(const uint32_t rowIndex, const uint32_t startColIndex, const uint32_t count);
 
@@ -36,6 +39,17 @@ public:
 
     BooleanVector& operator[](const uint32_t rowIndex);
     const BooleanVector& operator[](const uint32_t rowIndex) const;
+
+    BooleanMatrix& operator&=(const BooleanMatrix& other);
+    BooleanMatrix operator&(const BooleanMatrix& other) const;
+
+    BooleanMatrix& operator|=(const BooleanMatrix& other);
+    BooleanMatrix operator|(const BooleanMatrix& other) const;
+
+    BooleanMatrix& operator^=(const BooleanMatrix& other);
+    BooleanMatrix operator^(const BooleanMatrix& other) const;
+
+    BooleanMatrix operator~() const;
 
 private:
     DynamicArray<BooleanVector> matrixData_;

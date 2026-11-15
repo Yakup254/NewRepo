@@ -38,5 +38,21 @@ int main()
     testMatrix1.invertComponents(9, 2, 3);
     std::cout << "After modifications:\n" << testMatrix1 << std::endl;
 
+    BooleanMatrix testMatrix2(3, 5, false);
+    std::cout << testMatrix2 << std::endl;
+
+    for (uint32_t i = 0; i < testMatrix2.getRowsCount(); ++i)
+    {
+        for (uint32_t j = 0; j < testMatrix2.getColumnsCount(); ++j)
+        {
+            testMatrix2[i][j] = 1;
+        }
+    }
+    std::cout << "Satir sayisi: " << testMatrix2.getRowsCount() << std::endl;
+    std::cout << "Sutun sayisi: " << testMatrix2.getColumnsCount() << std::endl;
+    std::cout << testMatrix2 << std::endl;
+
+
+
     return 0;
 }
