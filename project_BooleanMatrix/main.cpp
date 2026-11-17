@@ -83,6 +83,10 @@ int main()
         std::cout << "Your matrix (weight = " << userMatrix.getWeight() << "):" << std::endl << userMatrix;
     }
 
+    BooleanMatrix testMatrix4;
+
+    testMatrix4.input();
+    testMatrix4.output();
 
 
     return 0;

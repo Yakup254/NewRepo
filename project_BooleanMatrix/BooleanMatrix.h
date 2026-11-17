@@ -21,6 +21,9 @@ public:
     BooleanMatrix& operator=(BooleanMatrix&& other) noexcept = default;
     void swap(BooleanMatrix& other) noexcept;
 
+    void input();
+    void output() const;
+
     uint32_t getRowsCount() const;
     uint32_t getColumnsCount() const;
 

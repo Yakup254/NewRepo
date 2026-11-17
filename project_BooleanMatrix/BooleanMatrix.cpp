@@ -35,6 +35,45 @@ void BooleanMatrix::swap(BooleanMatrix& other) noexcept
     matrixData_.swap(other.matrixData_);
 }
 
+
+void BooleanMatrix::input()
+{
+    uint32_t numRows = 0;
+    uint32_t numCols = 0;
+    std::cin >> numRows >> numCols;
+
+    BooleanMatrix tempMatrix(numRows, numCols, false);
+
+    for (uint32_t rowIndex = 0; rowIndex < numRows; ++rowIndex)
+    {
+        for (uint32_t colIndex = 0; colIndex < numCols; ++colIndex)
+        {
+            char bitChar;
+            std::cin >> bitChar;
+            assert((bitChar == '0' || bitChar == '1') && "Invalid character: expected '0' or '1'.");
+            tempMatrix[rowIndex].setValue(colIndex, bitChar == '1');
+        }
+    }
+
+    swap(tempMatrix);
+}
+
+
+void BooleanMatrix::output() const
+{
+    const uint32_t numRows = getRowsCount();
+    const uint32_t numCols = getColumnsCount();
+
+    for (uint32_t rowIndex = 0; rowIndex < numRows; ++rowIndex)
+    {
+        for (uint32_t colIndex = 0; colIndex < numCols; ++colIndex)
+        {
+            std::cout << (matrixData_[rowIndex][colIndex] ? '1' : '0');
+        }
+        std::cout << std::endl;
+    }
+}
+
 uint32_t BooleanMatrix::getRowsCount() const
 {
     return static_cast<uint32_t>(matrixData_.getLength());
