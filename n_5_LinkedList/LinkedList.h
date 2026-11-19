@@ -19,6 +19,8 @@ public:
 
     uint32_t getListSize() const;
     void swap(LinkedList& other) noexcept;
+    void input();
+    void output() const;
 
     ListNode* getHead() const;
     ListNode* getTail() const;
